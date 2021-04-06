@@ -1,0 +1,1736 @@
+\documentclass[11pt]{article}
+    \usepackage{fontspec, xunicode, xltxtra}
+    \setmainfont{Microsoft YaHei}
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{WineReviewAnalyze}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{githubux5730ux5740httpsgithub.comcaiji853dm_homework}{%
+\section{github地址：https://github.com/caiji853/DM\_homework}\label{githubux5730ux5740httpsgithub.comcaiji853dm_homework}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Import modules}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{import} \PY{n+nn}{bokeh} \PY{k}{as} \PY{n+nn}{bk}
+\PY{k+kn}{from} \PY{n+nn}{bokeh}\PY{n+nn}{.}\PY{n+nn}{io} \PY{k+kn}{import} \PY{n}{output\PYZus{}notebook}\PY{p}{,} \PY{n}{show}
+\PY{n}{output\PYZus{}notebook}\PY{p}{(}\PY{p}{)}
+\PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    
+    
+    
+    \hypertarget{ux5ffdux7565ux65e0ux5173ux8b66ux544a}{%
+\paragraph{忽略无关警告}\label{ux5ffdux7565ux65e0ux5173ux8b66ux544a}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Ignore irrelevant warnings }
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 设置整体绘图打印样式}
+\PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format=\PYZsq{}retina\PYZsq{}
+\PY{n}{sns}\PY{o}{.}\PY{n}{set}\PY{p}{(}\PY{p}{)} 
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.figsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.labelpad}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{10}
+\PY{n}{sns}\PY{o}{.}\PY{n}{set\PYZus{}style}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{darkgrid}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} sns.set\PYZus{}palette(\PYZdq{}Reds\PYZdq{})}
+\PY{c+c1}{\PYZsh{} sns.set\PYZus{}context(\PYZdq{}poster\PYZdq{}, font\PYZus{}scale=1.0)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux5f15ux5165ux548cux5206ux6790ux6570ux636e}{%
+\section{1.引入和分析数据}\label{ux5f15ux5165ux548cux5206ux6790ux6570ux636e}}
+
+    \hypertarget{ux9996ux5148ux5206ux6790wine-reviewsux6570ux636eux96c6ux5206ux6790winemag-data_first150k.csv-csvux6587ux4ef6-ux4f7fux7528pandasux5e93ux4e2dux7684read_csvux65b9ux6cd5ux5c06csvux6587ux4ef6ux7684ux5185ux5bb9ux52a0ux8f7dux5230dataframeux5bf9ux8c61ux4e2dux4f20ux5165ux53c2ux6570ux4e2dux8bbeux7f6edataframeux5217ux7684ux540dux79f0}{%
+\subsubsection{\texorpdfstring{首先分析Wine-Reviews数据集,分析winemag-data\_first150k.csv
+CSV文件。使用Pandas库中的\texttt{read\_csv()}方法将CSV文件的内容加载到DataFrame()对象中。传入参数中设置DataFrame列的名称。}{首先分析Wine-Reviews数据集,分析winemag-data\_first150k.csv CSV文件。  使用Pandas库中的read\_csv()方法将CSV文件的内容加载到DataFrame()对象中。传入参数中设置DataFrame列的名称。}}\label{ux9996ux5148ux5206ux6790wine-reviewsux6570ux636eux96c6ux5206ux6790winemag-data_first150k.csv-csvux6587ux4ef6-ux4f7fux7528pandasux5e93ux4e2dux7684read_csvux65b9ux6cd5ux5c06csvux6587ux4ef6ux7684ux5185ux5bb9ux52a0ux8f7dux5230dataframeux5bf9ux8c61ux4e2dux4f20ux5165ux53c2ux6570ux4e2dux8bbeux7f6edataframeux5217ux7684ux540dux79f0}}
+
+    \hypertarget{data-columns}{%
+\subsubsection{Data Columns}\label{data-columns}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  country：The country that the wine is from
+\item
+  description
+\item
+  designation：The vineyard within the winery where the grapes that made
+  the wine are from
+\item
+  points：The number of points WineEnthusiast rated the wine on a scale
+  of 1-100 (though they say they only post reviews for wines that score
+  \textgreater=80)
+\item
+  price：The cost for a bottle of the wine
+\item
+  province：The province or state that the wine is from
+\item
+  region\_1：The wine growing area in a province or state (ie Napa)
+\item
+  region\_2：Sometimes there are more specific regions specified within
+  a wine growing area (ie Rutherford inside the Napa Valley), but this
+  value can sometimes be blank
+\item
+  variety：The type of grapes used to make the wine (ie Pinot Noir)
+\item
+  winery：The winery that made the wine
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 属性列表}
+\PY{n}{column\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{index}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{description}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{designation}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{points}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+             \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{province}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{variety}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{winery}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 从CSV文件中读取数据}
+\PY{n}{WinerDF} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F:/Data Mining/Wine Reviews/wine\PYZhy{}reviews/winemag\PYZhy{}data\PYZus{}first150k.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} 
+                        \PY{n}{names} \PY{o}{=} \PY{n}{column\PYZus{}names}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux4f7fux7528shapeux67e5ux770bux6570ux636eux96c6ux7684ux5143ux7ec4ux6570ux91cf15092910}{%
+\subsubsection{\texorpdfstring{使用\texttt{shape（）}查看数据集的元组数量(150929,10)}{使用shape（）查看数据集的元组数量(150929,10)}}\label{ux4f7fux7528shapeux67e5ux770bux6570ux636eux96c6ux7684ux5143ux7ec4ux6570ux91cf15092910}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(150929, 10)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux4f7fux7528infoux67e5ux770bux6570ux636eux7684ux5c5eux6027}{%
+\subsubsection{\texorpdfstring{使用\texttt{info()}查看数据的属性}{使用info()查看数据的属性}}\label{ux4f7fux7528infoux67e5ux770bux6570ux636eux7684ux5c5eux6027}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 150929 entries, 1 to 150929
+Data columns (total 10 columns):
+ \#   Column       Non-Null Count   Dtype
+---  ------       --------------   -----
+ 0   country      150924 non-null  object
+ 1   description  150929 non-null  object
+ 2   designation  105194 non-null  object
+ 3   points       150929 non-null  int64
+ 4   price        137234 non-null  float64
+ 5   province     150924 non-null  object
+ 6   region\_1     125869 non-null  object
+ 7   region\_2     60952 non-null   object
+ 8   variety      150929 non-null  object
+ 9   winery       150929 non-null  object
+dtypes: float64(1), int64(1), object(8)
+memory usage: 12.7+ MB
+    \end{Verbatim}
+
+    \hypertarget{ux9488ux5bf9ux6807ux79f0ux5c5eux6027ux7edfux8ba1ux5176ux9891ux6570}{%
+\subsection{针对标称属性，统计其频数}\label{ux9488ux5bf9ux6807ux79f0ux5c5eux6027ux7edfux8ba1ux5176ux9891ux6570}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}查看所有不相等的国家}
+\PY{n}{unique\PYZus{}countries} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total amount of unique countries: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{unique\PYZus{}countries}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{unique\PYZus{}countries}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total amount of unique countries: 49
+['Spain' 'US' 'France' 'Italy' 'New Zealand' 'Bulgaria' 'Argentina'
+ 'Australia' 'Portugal' 'Israel' 'South Africa' 'Greece' 'Chile' 'Morocco'
+ 'Romania' 'Germany' 'Canada' 'Moldova' 'Hungary' 'Austria' 'Croatia'
+ 'Slovenia' nan 'India' 'Turkey' 'Macedonia' 'Lebanon' 'Serbia' 'Uruguay'
+ 'Switzerland' 'Albania' 'Bosnia and Herzegovina' 'Brazil' 'Cyprus'
+ 'Lithuania' 'Japan' 'China' 'South Korea' 'Ukraine' 'England' 'Mexico'
+ 'Georgia' 'Montenegro' 'Luxembourg' 'Slovakia' 'Czech Republic' 'Egypt'
+ 'Tunisia' 'US-France']
+    \end{Verbatim}
+
+    \hypertarget{ux4f7fux7528value_countsux53efux4ee5ux5f88ux65b9ux4fbfux7684ux7edfux8ba1ux51faux5404ux6807ux79f0ux5c5eux6027ux7684ux9891ux6570}{%
+\subsubsection{\texorpdfstring{使用\texttt{value\_counts()}可以很方便的统计出各标称属性的频数}{使用value\_counts()可以很方便的统计出各标称属性的频数}}\label{ux4f7fux7528value_countsux53efux4ee5ux5f88ux65b9ux4fbfux7684ux7edfux8ba1ux51faux5404ux6807ux79f0ux5c5eux6027ux7684ux9891ux6570}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}查看所有国家的频数统计}
+\PY{n}{review\PYZus{}totals\PYZus{}country} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total amount of countries:}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{review\PYZus{}totals\PYZus{}country}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{review\PYZus{}totals\PYZus{}country}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total amount of countries:48
+US                        62396
+Italy                     23478
+France                    21098
+Spain                      8268
+Chile                      5816
+Argentina                  5631
+Portugal                   5322
+Australia                  4957
+New Zealand                3320
+Austria                    3057
+Germany                    2452
+South Africa               2258
+Greece                      884
+Israel                      630
+Hungary                     231
+Canada                      196
+Romania                     139
+Slovenia                     94
+Uruguay                      92
+Croatia                      89
+Bulgaria                     77
+Moldova                      71
+Mexico                       63
+Turkey                       52
+Georgia                      43
+Lebanon                      37
+Cyprus                       31
+Brazil                       25
+Macedonia                    16
+Serbia                       14
+Morocco                      12
+England                       9
+Luxembourg                    9
+Lithuania                     8
+India                         8
+Czech Republic                6
+Ukraine                       5
+Switzerland                   4
+South Korea                   4
+Bosnia and Herzegovina        4
+Slovakia                      3
+Egypt                         3
+China                         3
+Tunisia                       2
+Albania                       2
+Montenegro                    2
+Japan                         2
+US-France                     1
+Name: country, dtype: int64
+    \end{Verbatim}
+
+    \hypertarget{ux5bf9ux6bd4ux4e0aux9762ux4e24ux7ec4ux6570ux636eux53d1ux73b0ux56fdux5bb6ux5b58ux5728ux4e3aux7a7ananux7684ux60c5ux51b5ux8fdbux800cux4f7fux4e0dux540cux56fdux5bb6ux6570ux591a1}{%
+\paragraph{对比上面两组数据，发现国家存在为空（NAN）的情况，进而使不同国家数多1。}\label{ux5bf9ux6bd4ux4e0aux9762ux4e24ux7ec4ux6570ux636eux53d1ux73b0ux56fdux5bb6ux5b58ux5728ux4e3aux7a7ananux7684ux60c5ux51b5ux8fdbux800cux4f7fux4e0dux540cux56fdux5bb6ux6570ux591a1}}
+
+\hypertarget{ux67e5ux770bux5404ux4e2aux5c5eux6027ux7684ux7a7aux503cux7f3aux5931ux503cux7684ux4e2aux6570}{%
+\subsection{查看各个属性的空值（缺失值）的个数}\label{ux67e5ux770bux5404ux4e2aux5c5eux6027ux7684ux7a7aux503cux7f3aux5931ux503cux7684ux4e2aux6570}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 每列空值的数目:}
+\PY{n}{WinerDF}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+country            5
+description        0
+designation    45735
+points             0
+price          13695
+province           5
+region\_1       25060
+region\_2       89977
+variety            0
+winery             0
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux4f7fux7528.describe-ux51fdux6570ux6765ux68c0ux67e5ux5176ux4ed6ux6807ux79f0ux5c5eux6027ux7684ux6982ux62ecux4fe1ux606f}{%
+\subsubsection{\texorpdfstring{使用\texttt{.describe()}
+函数来检查其他标称属性的概括信息}{使用.describe() 函数来检查其他标称属性的概括信息}}\label{ux4f7fux7528.describe-ux51fdux6570ux6765ux68c0ux67e5ux5176ux4ed6ux6807ux79f0ux5c5eux6027ux7684ux6982ux62ecux4fe1ux606f}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\texttt{count}} 列属性值的总数
+\item
+  \textbf{\texttt{unique}} 不同数据值的数量
+\item
+  \textbf{\texttt{top}} 频数最大的属性值
+\item
+  \textbf{\texttt{freq}} 最大频数属性值对应的频数（众数）
+\end{itemize}
+
+\hypertarget{ux5e76ux753bux51faux76f4ux65b9ux56fe}{%
+\subsubsection{并画出直方图}\label{ux5e76ux753bux51faux76f4ux65b9ux56fe}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} country的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count     150924
+unique        48
+top           US
+freq       62396
+Name: country, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{62}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} country的直方图}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{62}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d817f18b48>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_22_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} designation的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{designation}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count      105194
+unique      30621
+top       Reserve
+freq         2752
+Name: designation, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} designation前20条频数统计数据的直方图}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{designation}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d8001e4548>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_24_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} province的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{province}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count         150924
+unique           455
+top       California
+freq           44507
+Name: province, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} province前20条频数统计信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{province}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d8006c7348>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} region\PYZus{}1的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count          125869
+unique           1236
+top       Napa Valley
+freq             6208
+Name: region\_1, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} region\PYZus{}1前20条频数信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d80030ee08>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_28_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} region\PYZus{}2的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count             60952
+unique               18
+top       Central Coast
+freq              13057
+Name: region\_2, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} region\PYZus{}2对应的直方图}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d8003a8388>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_30_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} variety的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{variety}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count         150929
+unique           632
+top       Chardonnay
+freq           14482
+Name: variety, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} variety的前50条频数统计数据}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{variety}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{50}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d8003a4708>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} winery的概括性信息}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{winery}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count              150929
+unique              14810
+top       Williams Selyem
+freq                  374
+Name: winery, dtype: object
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{winery}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{30}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d80046a208>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_34_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{ux5bf9ux4e8eintux6216ux8005floatux7c7bux578bux7684ux6570ux503cux5c5eux6027describeux53efux4ee5ux65b9ux4fbfux7684ux5f97ux5230ux5176ux4e94ux6570ux6982ux62ec}{%
+\subsubsection{\texorpdfstring{对于\texttt{int}或者\texttt{float}类型的数值属性\texttt{describe()}可以方便的得到其五数概括}{对于int或者float类型的数值属性describe()可以方便的得到其五数概括}}\label{ux5bf9ux4e8eintux6216ux8005floatux7c7bux578bux7684ux6570ux503cux5c5eux6027describeux53efux4ee5ux65b9ux4fbfux7684ux5f97ux5230ux5176ux4e94ux6570ux6982ux62ec}}
+
+\hypertarget{ux5e76ux4f7fux7528boxplotux5bf9ux6307ux5b9aux5217ux753bux51faux5176ux7bb1ux578bux56fe}{%
+\subsubsection{\texorpdfstring{并使用\texttt{boxplot()}对指定列画出其箱型图}{并使用boxplot()对指定列画出其箱型图}}\label{ux5e76ux4f7fux7528boxplotux5bf9ux6307ux5b9aux5217ux753bux51faux5176ux7bb1ux578bux56fe}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count    150929.000000
+mean         87.888365
+std           3.222335
+min          80.000000
+25\%          86.000000
+50\%          88.000000
+75\%          90.000000
+max         100.000000
+Name: points, dtype: float64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{pointsux6570ux636eux5448ux5355ux5cf0ux5206ux5e03-ux4e14ux5747ux503cux4e3a87.88ux4e2dux4f4dux6570ux4e3a88ux4f17ux6570ux4e3a87}{%
+\paragraph{points数据呈单峰分布,
+且均值为87.88，中位数为88，众数为87}\label{pointsux6570ux636eux5448ux5355ux5cf0ux5206ux5e03-ux4e14ux5747ux503cux4e3a87.88ux4e2dux4f4dux6570ux4e3a88ux4f17ux6570ux4e3a87}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d8002ed448>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} points的箱型图}
+\PY{n}{WinerDF}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}\PY{n}{column}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d8005bea48>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_39_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+count    137234.000000
+mean         33.130012
+std          36.318581
+min           4.000000
+25\%          16.000000
+50\%          24.000000
+75\%          40.000000
+max        2300.000000
+Name: price, dtype: float64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux6570ux636eux5448ux591aux5cf0ux5206ux5e03ux4e14ux5747ux503cux4e3a33.13ux4e2dux4f4dux6570ux4e3a24ux4f17ux6570ux4e3a20.0}{%
+\paragraph{数据呈多峰分布，且均值为33.13，中位数为24，众数为20.0}\label{ux6570ux636eux5448ux591aux5cf0ux5206ux5e03ux4e14ux5747ux503cux4e3a33.13ux4e2dux4f4dux6570ux4e3a24ux4f17ux6570ux4e3a20.0}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ \PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{40}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d800eda3c8>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}\PY{n}{column}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d801fdb388>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_43_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{ux63a5ux4e0bux6765ux5bf9ux7f3aux5931ux6570ux636eux8fdbux884cux5904ux7406}{%
+\subsection{接下来对缺失数据进行处理}\label{ux63a5ux4e0bux6765ux5bf9ux7f3aux5931ux6570ux636eux8fdbux884cux5904ux7406}}
+
+    \hypertarget{ux4f7fux7528ux76f8ux5173ux5173ux7cfbux586bux5145}{%
+\subsubsection{使用相关关系填充}\label{ux4f7fux7528ux76f8ux5173ux5173ux7cfbux586bux5145}}
+
+    \hypertarget{ux8fdbux884cux7b80ux5355ux7ebfux6027ux62dfux5408ux4f7fux7528pointsux4e0epriceux7684ux76f8ux5173ux6027ux6765ux586bux5145priceux7684ux7f3aux503c}{%
+\subsubsection{进行简单线性拟合，使用points与price的相关性来填充price的缺值}\label{ux8fdbux884cux7b80ux5355ux7ebfux6027ux62dfux5408ux4f7fux7528pointsux4e0epriceux7684ux76f8ux5173ux6027ux6765ux586bux5145priceux7684ux7f3aux503c}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 所有price为空的行构成待预测数据集}
+\PY{n}{points\PYZus{}X} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{price}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{points\PYZus{}X}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+index
+32    90
+56    90
+72    91
+Name: points, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 计算 Spearman秩相关系数，判断相关性}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{spearmanr}
+\PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm}
+\PY{k+kn}{from} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{formula}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k+kn}{import} \PY{n}{ols}
+
+\PY{n}{WinerDF\PYZus{}del} \PY{o}{=} \PY{n}{WinerDF}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{how}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{any}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{coef}\PY{p}{,}\PY{n}{p} \PY{o}{=} \PY{n}{spearmanr}\PY{p}{(}\PY{n}{WinerDF\PYZus{}del}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{WinerDF\PYZus{}del}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Spearmans 相关系数: }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{coef}\PY{p}{)}
+\PY{n}{alpha} \PY{o}{=} \PY{l+m+mf}{0.05}
+\PY{k}{if} \PY{n}{p} \PY{o}{\PYZgt{}} \PY{n}{alpha}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{样本不相关 (不能拒绝H0)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{k}{else}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{样本相关 (r拒绝H0)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Spearmans 相关系数: 0.5956
+样本相关 (r拒绝H0)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 简单线性回归拟合}
+\PY{n}{wine\PYZus{}model} \PY{o}{=} \PY{n}{ols}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price \PYZti{}points}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{data}\PY{o}{=}\PY{n}{WinerDF\PYZus{}del}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{wine\PYZus{}model}\PY{o}{.}\PY{n}{params}\PY{p}{)}
+\PY{n}{price\PYZus{}pred} \PY{o}{=} \PY{n}{wine\PYZus{}model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{points\PYZus{}X}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} 使用预测值填充空值}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{price\PYZus{}pred}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{WinerDF}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{price\PYZus{}pred}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Intercept   -421.941996
+points         5.183769
+dtype: float64
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDF}\PY{p}{[}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{price}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Empty DataFrame
+Columns: [country, description, designation, points, price, province, region\_1,
+region\_2, variety, winery]
+Index: []
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux5254ux9664ux7f3aux5931ux90e8ux5206}{%
+\subsubsection{剔除缺失部分}\label{ux5254ux9664ux7f3aux5931ux90e8ux5206}}
+
+\hypertarget{ux5bf9ux4e8ecountryux4fe1ux606fux4e0dux5141ux8bb8ux4e3aux7a7aux63a5ux7740ux5904ux7406countryux5c5eux6027}{%
+\subsubsection{对于``country''信息不允许为空，接着处理country属性}\label{ux5bf9ux4e8ecountryux4fe1ux606fux4e0dux5141ux8bb8ux4e3aux7a7aux63a5ux7740ux5904ux7406countryux5c5eux6027}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 查询country属性为空的行}
+\PY{n}{WinerDF}\PY{p}{[}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{country}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+       country                                        description  \textbackslash{}
+index
+1133       NaN  Delicate white flowers and a spin of lemon pee{\ldots}
+1440       NaN  A blend of 60\% Syrah, 30\% Cabernet Sauvignon a{\ldots}
+68226      NaN  From first sniff to last, the nose never makes{\ldots}
+113016     NaN  From first sniff to last, the nose never makes{\ldots}
+135696     NaN  From first sniff to last, the nose never makes{\ldots}
+
+         designation  points  price province region\_1 region\_2     variety  \textbackslash{}
+index
+1133       Askitikos      90   17.0      NaN      NaN      NaN   Assyrtiko
+1440            Shah      90   30.0      NaN      NaN      NaN   Red Blend
+68226   Piedra Feliz      81   15.0      NaN      NaN      NaN  Pinot Noir
+113016  Piedra Feliz      81   15.0      NaN      NaN      NaN  Pinot Noir
+135696  Piedra Feliz      81   15.0      NaN      NaN      NaN  Pinot Noir
+
+           winery
+index
+1133     Tsililis
+1440    Büyülübağ
+68226     Chilcas
+113016    Chilcas
+135696    Chilcas
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux53efux4ee5ux770bux5230ux53eaux67095ux6761ux6570ux636eux6570ux636eux91cfux5f88ux5c0fux5e76ux4e14ux5bf9ux5e94ux5176ux4ed6ux53efux4ee5ux63a8ux65adux56fdux5bb6ux7684provinceux7b49ux5c5eux6027ux4e5fux4e3aux7a7a}{%
+\subsubsection{可以看到只有5条数据，数据量很小。并且对应其他可以推断国家的`province'等属性也为空，}\label{ux53efux4ee5ux770bux5230ux53eaux67095ux6761ux6570ux636eux6570ux636eux91cfux5f88ux5c0fux5e76ux4e14ux5bf9ux5e94ux5176ux4ed6ux53efux4ee5ux63a8ux65adux56fdux5bb6ux7684provinceux7b49ux5c5eux6027ux4e5fux4e3aux7a7a}}
+
+\hypertarget{ux6240ux4ee5ux4f7fux7528dropnaux5254ux9664ux8fd9ux4e9bux884c}{%
+\subsubsection{\texorpdfstring{所以使用\texttt{dropna()}剔除这些行}{所以使用dropna()剔除这些行}}\label{ux6240ux4ee5ux4f7fux7528dropnaux5254ux9664ux8fd9ux4e9bux884c}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} t剔除空值元组}
+\PY{n}{WinerDF} \PY{o}{=} \PY{n}{WinerDF}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{how}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{any}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 查询country属性为空的行}
+\PY{n}{WinerDF}\PY{p}{[}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{country}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Empty DataFrame
+Columns: [country, description, designation, points, price, province, region\_1,
+region\_2, variety, winery]
+Index: []
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux4f7fux7528ux6700ux9ad8ux9891ux7387ux503cux586bux5145}{%
+\subsubsection{使用最高频率值填充}\label{ux4f7fux7528ux6700ux9ad8ux9891ux7387ux503cux586bux5145}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 查看designation 空值}
+\PY{n}{WinerDF}\PY{p}{[}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{designation}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      country                                        description designation  \textbackslash{}
+index
+36     France  Gingery spice notes accent fresh pear and melo{\ldots}         NaN
+37      Italy  Aromas of forest floor, violet, red berry and {\ldots}         NaN
+38      Italy  This has a charming nose that boasts rose, vio{\ldots}         NaN
+48      Italy  Ripe dark-skinned berry, forest floor and cook{\ldots}         NaN
+
+       points  price      province                      region\_1 region\_2  \textbackslash{}
+index
+36         90   60.0  Rhône Valley           Châteauneuf-du-Pape      NaN
+37         90   29.0       Tuscany  Vino Nobile di Montepulciano      NaN
+38         90   23.0       Tuscany              Chianti Classico      NaN
+48         90   50.0       Tuscany        Brunello di Montalcino      NaN
+
+                       variety                        winery
+index
+36     Rhône-style White Blend  Clos de L'Oratoire des Papes
+37                  Sangiovese                    Avignonesi
+38                  Sangiovese              Casina di Cornia
+48                  Sangiovese            Brunelli Martoccia
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 使用最高频率值填充}
+\PY{n}{designation\PYZus{}mode} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{designation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{designation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{designation\PYZus{}mode}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 查看designation 空值}
+\PY{n}{WinerDF}\PY{p}{[}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{designation}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Empty DataFrame
+Columns: [country, description, designation, points, price, province, region\_1,
+region\_2, variety, winery]
+Index: []
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux4f7fux7528ux6570ux636eux5bf9ux8c61ux76f8ux4f3cux6027ux586bux5145}{%
+\subsubsection{使用数据对象相似性填充}\label{ux4f7fux7528ux6570ux636eux5bf9ux8c61ux76f8ux4f3cux6027ux586bux5145}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}  由于之前删除数据，首先重置索引}
+\PY{n}{WinerDF}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 选择region\PYZus{}1 为空的元组}
+\PY{n}{region\PYZus{}null} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[} \PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{province}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{variety}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\PY{n}{region\PYZus{}null}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+            province             variety      country
+24             Kumeu          Chardonnay  New Zealand
+29          Bulgaria              Mavrud     Bulgaria
+41             Idaho        Petite Sirah           US
+63        Alentejano      Portuguese Red     Portugal
+73          Alentejo      Portuguese Red     Portugal
+{\ldots}              {\ldots}                 {\ldots}          {\ldots}
+150895  Maipo Valley              Merlot        Chile
+150896  Maipo Valley          Chardonnay        Chile
+150897  Rapel Valley  Cabernet Sauvignon        Chile
+150898  Maipo Valley  Cabernet Sauvignon        Chile
+150899  Maipo Valley              Merlot        Chile
+
+[25055 rows x 3 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux5f53ux7701ux4efdux5ddeux548cux917fux9020ux8461ux8404ux9152ux7684ux8461ux8404ux79cdux7c7bux76f8ux540cux65f6ux8ba4ux4e3aregion_1ux503cux6700ux6709ux53efux80fdux76f8ux540cux7528ux4ee5ux586bux5145ux5f53ux524dux5143ux7ec4ux5f53ux627eux4e0dux5230ux65f6ux653eux5bbdux8303ux56f4ux4f7fux7528ux540cux4e00ux7701ux4efdux5ddeux4e2dux6700ux5927ux9891ux6570ux7684region_1ux6765ux586bux5145ux6700ux540eux5bf9ux4e8eux627eux4e0dux5230ux76f8ux4f3cux5143ux7ec4ux7684ux6570ux636eux4f7fux7528ux8be5ux56fdux6700ux5927ux9891ux6570ux5bf9ux5e94ux7684ux503cux586bux5145-ux5269ux4f59ux7684ux672aux80fdux586bux5145ux503cux5143ux7ec4ux8868ux660eux65e0ux6cd5ux4eceux73b0ux6709ux6570ux636eux83b7ux5f97ux6709ux7528ux7684ux4fe1ux606fux6765ux586bux5145}{%
+\subsubsection{\texorpdfstring{当省份（州）和酿造葡萄酒的葡萄种类相同时，认为region\_1值最有可能相同，用以填充当前元组。当找不到时，放宽范围使用同一省份（州）中最大频数的region\_1来填充。最后对于找不到相似元组的数据，使用该国最大频数对应的值填充。剩余的未能填充值元组，表明无法从现有数据获得有用的信息来填充。}{当省份（州）和酿造葡萄酒的葡萄种类相同时，认为region\_1值最有可能相同，用以填充当前元组。当找不到时，放宽范围使用同一省份（州）中最大频数的region\_1来填充。最后对于找不到相似元组的数据，使用该国最大频数对应的值填充。 剩余的未能填充值元组，表明无法从现有数据获得有用的信息来填充。}}\label{ux5f53ux7701ux4efdux5ddeux548cux917fux9020ux8461ux8404ux9152ux7684ux8461ux8404ux79cdux7c7bux76f8ux540cux65f6ux8ba4ux4e3aregion_1ux503cux6700ux6709ux53efux80fdux76f8ux540cux7528ux4ee5ux586bux5145ux5f53ux524dux5143ux7ec4ux5f53ux627eux4e0dux5230ux65f6ux653eux5bbdux8303ux56f4ux4f7fux7528ux540cux4e00ux7701ux4efdux5ddeux4e2dux6700ux5927ux9891ux6570ux7684region_1ux6765ux586bux5145ux6700ux540eux5bf9ux4e8eux627eux4e0dux5230ux76f8ux4f3cux5143ux7ec4ux7684ux6570ux636eux4f7fux7528ux8be5ux56fdux6700ux5927ux9891ux6570ux5bf9ux5e94ux7684ux503cux586bux5145-ux5269ux4f59ux7684ux672aux80fdux586bux5145ux503cux5143ux7ec4ux8868ux660eux65e0ux6cd5ux4eceux73b0ux6709ux6570ux636eux83b7ux5f97ux6709ux7528ux7684ux4fe1ux606fux6765ux586bux5145}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 相似值填充}
+\PY{n}{region} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{ConProvDict}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{region\PYZus{}null}\PY{o}{.}\PY{n}{itertuples}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} 初始化}
+    \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{ConProvDict}\PY{p}{)} \PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{simTuple} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{province}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{variety}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{simTuple}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n}{simTuple} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{province}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        
+        \PY{c+c1}{\PYZsh{} 对于找不到相似元组的数据，使用该国region\PYZus{}1最大频数值填充}
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{simTuple}\PY{p}{)} \PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n}{simTuple} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{country}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{simTuple}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n}{region} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+            \PY{n}{subDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{:}\PY{n}{region}\PY{p}{\PYZcb{}}
+            \PY{n}{ConProvDict}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{=} \PY{n}{subDict}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{region} \PY{o}{=} \PY{n}{simTuple}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{n}{subDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{:}\PY{n}{region}\PY{p}{\PYZcb{}}
+            \PY{n}{ConProvDict}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{=} \PY{n}{subDict}
+            \PY{n}{WinerDF}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{region}   
+    \PY{k}{if} \PY{n}{ConProvDict}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{!=}\PY{k+kc}{None} \PY{o+ow}{and} \PY{n}{ConProvDict}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{o}{!=}\PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{region} \PY{o}{=} \PY{n}{ConProvDict}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{]}
+        \PY{k}{if} \PY{n}{region} \PY{o}{!=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+             \PY{n}{WinerDF}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{region}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{simTuple} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{province}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{variety}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{simTuple}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n}{simTuple} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{province}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{c+c1}{\PYZsh{} 对于找不到相似元组的数据，使用该国region\PYZus{}1最大频数值填充}
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{simTuple}\PY{p}{)} \PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n}{simTuple} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{country}\PY{o}{==}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{simTuple}\PY{p}{)}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n}{region} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+            \PY{n}{subDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{:}\PY{n}{region}\PY{p}{\PYZcb{}}
+            \PY{n}{ConProvDict}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{=} \PY{n}{subDict}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{region} \PY{o}{=} \PY{n}{simTuple}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{n}{subDict} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{:}\PY{n}{region}\PY{p}{\PYZcb{}}
+            \PY{n}{ConProvDict}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{o}{=} \PY{n}{subDict}
+            \PY{n}{WinerDF}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{region}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 剩余region\PYZus{}1 为空的元组数}
+\PY{n+nb}{len}\PY{p}{(}\PY{n}{WinerDF}\PY{p}{[} \PY{n}{WinerDF}\PY{o}{.}\PY{n}{region\PYZus{}1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+24900
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux6bd4ux8f83ux6e05ux6d17ux524dux540eux7684ux6570ux636eux96c6}{%
+\subsection{比较清洗前后的数据集}\label{ux6bd4ux8f83ux6e05ux6d17ux524dux540eux7684ux6570ux636eux96c6}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 获取原数据集，并删除country值为空的元组来对齐两个数据集}
+\PY{n}{WinerDF\PYZus{}old} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F:/Data Mining/Wine Reviews/wine\PYZhy{}reviews/winemag\PYZhy{}data\PYZus{}first150k.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} 
+                        \PY{n}{names} \PY{o}{=} \PY{n}{column\PYZus{}names}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{WinerDF\PYZus{}old} \PY{o}{=} \PY{n}{WinerDF\PYZus{}old}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{how}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{any}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{price\PYZus{}now} \PY{o}{=} \PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{357}\PY{p}{)}
+\PY{n}{price\PYZus{}old} \PY{o}{=} \PY{n}{WinerDF\PYZus{}old}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{357}\PY{p}{)}
+\PY{n}{newDF} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{price\PYZus{}now}\PY{o}{.}\PY{n}{values}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price\PYZus{}old}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{price\PYZus{}old}\PY{o}{.}\PY{n}{values}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{newDF}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     price  price\_old
+0     7860       7860
+1     7053       7053
+2     5988       5988
+3     5955       5955
+4     5448       5448
+..     {\ldots}        {\ldots}
+352      1          1
+353      1          1
+354      1          1
+355      1          1
+356      1          1
+
+[357 rows x 2 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.figsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{14}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}
+\PY{n}{newDF}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{70}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d810266188>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_68_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{71}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 原数据point\PYZhy{}price蜂窝图}
+\PY{n}{sns}\PY{o}{.}\PY{n}{jointplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{WinerDF\PYZus{}old}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF\PYZus{}old}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{l+m+mi}{80}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{kind}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+              \PY{n}{gridsize}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{71}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<seaborn.axisgrid.JointGrid at 0x2d81e68e3c8>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_69_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{73}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 清洗后数据point\PYZhy{}price蜂窝图}
+\PY{n}{sns}\PY{o}{.}\PY{n}{jointplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{WinerDF}\PY{p}{[}\PY{p}{(}\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{l+m+mi}{80}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{WinerDF}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{kind}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+              \PY{n}{gridsize}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{73}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<seaborn.axisgrid.JointGrid at 0x2d820109108>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_70_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{ux6bd4ux8f83ux6570ux636eux6e05ux6d17ux524dux540eux7684ux8702ux7a9dux56feux53efux4ee5ux6e05ux695aux7684ux770bux5230ux6e05ux6d17ux540eux7684pointux548cpriceux5bc6ux5ea6ux53d1ux751fux4e86ux663eux8457ux7684ux53d8ux5316ux539fux6570ux636eux96c6ux5bc6ux5ea6ux96c6ux4e2dux5728ux4ef7ux683cux572810-20ux4e4bux95f4ux800cux7ecfux8fc7ux6570ux636eux6e05ux6d17ux5bf9ux7f3aux5931ux7684ux4ef7ux683cux6570ux636eux8865ux5145ux540eux53d1ux73b0ux6570ux636eux5728ux5176ux4ed6ux7684ux533aux95f4ux529bux56fe20-30ux4e5fux53d1ux751fux4e86ux805aux96c6ux53efux80fdux5bf9ux6570ux636eux5206ux6790ux4ea7ux751fux5f71ux54cd}{%
+\subsubsection{比较数据清洗前后的蜂窝图，可以清楚的看到清洗后的point和price密度发生了显著的变化，原数据集密度集中在价格在10-20之间，而经过数据清洗，对缺失的价格数据补充后，发现数据在其他的区间力图20-30也发生了聚集，可能对数据分析产生影响。}\label{ux6bd4ux8f83ux6570ux636eux6e05ux6d17ux524dux540eux7684ux8702ux7a9dux56feux53efux4ee5ux6e05ux695aux7684ux770bux5230ux6e05ux6d17ux540eux7684pointux548cpriceux5bc6ux5ea6ux53d1ux751fux4e86ux663eux8457ux7684ux53d8ux5316ux539fux6570ux636eux96c6ux5bc6ux5ea6ux96c6ux4e2dux5728ux4ef7ux683cux572810-20ux4e4bux95f4ux800cux7ecfux8fc7ux6570ux636eux6e05ux6d17ux5bf9ux7f3aux5931ux7684ux4ef7ux683cux6570ux636eux8865ux5145ux540eux53d1ux73b0ux6570ux636eux5728ux5176ux4ed6ux7684ux533aux95f4ux529bux56fe20-30ux4e5fux53d1ux751fux4e86ux805aux96c6ux53efux80fdux5bf9ux6570ux636eux5206ux6790ux4ea7ux751fux5f71ux54cd}}
+
+    \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{ux63a5ux4e0bux6765ux5904ux7406winemag-data-130k-v2.csvux6587ux4ef6}{%
+\section{接下来处理winemag-data-130k-v2.csv文件}\label{ux63a5ux4e0bux6765ux5904ux7406winemag-data-130k-v2.csvux6587ux4ef6}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 属性列表}
+\PY{n}{column\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{index}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{country}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{description}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{designation}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{points}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+             \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{province}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{region\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{taster\PYZus{}name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{taster\PYZus{}twitter\PYZus{}handle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{title}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{variety}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{winery}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\PY{c+c1}{\PYZsh{} 获取v2数据集}
+\PY{n}{WinerDFV2} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F:/Data Mining/Wine Reviews/wine\PYZhy{}reviews/winemag\PYZhy{}data\PYZhy{}130k\PYZhy{}v2.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} 
+                        \PY{n}{names} \PY{o}{=} \PY{n}{column\PYZus{}names}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux5bf9ux4e8eux5176ux4ed6ux5c5eux6027ux7684ux5904ux7406ux4e0eux7b2cux4e00ux4e2aux6570ux636eux96c6ux5927ux81f4ux76f8ux540cux8fd9ux91ccux91cdux70b9ux5904ux7406region_1ux5c5eux6027ux7684ux7f3aux5931ux503cregion_2ux5c5eux6027ux53efux80fdux4e3aux7a7aux6240ux4ee5ux4e0dux505aux5904ux7406}{%
+\subsubsection{\texorpdfstring{对于其他属性的处理与第一个数据集大致相同，这里重点处理\texttt{region\_1}属性的缺失值，region\_2属性可能为空所以不做处理}{对于其他属性的处理与第一个数据集大致相同，这里重点处理region\_1属性的缺失值，region\_2属性可能为空所以不做处理}}\label{ux5bf9ux4e8eux5176ux4ed6ux5c5eux6027ux7684ux5904ux7406ux4e0eux7b2cux4e00ux4e2aux6570ux636eux96c6ux5927ux81f4ux76f8ux540cux8fd9ux91ccux91cdux70b9ux5904ux7406region_1ux5c5eux6027ux7684ux7f3aux5931ux503cregion_2ux5c5eux6027ux53efux80fdux4e3aux7a7aux6240ux4ee5ux4e0dux505aux5904ux7406}}
+
+    \hypertarget{ux901aux8fc7ux89c2ux5bdfux53efux4ee5ux5f97ux51fatitleux5c5eux6027ux503cux4e2dux62ecux53f7ux91ccux7684ux5185ux5bb9ux901aux5e38ux4e3aregion_1ux7684ux5c5eux6027ux503cux56e0ux6b64ux53efux4ee5ux63d0ux53d6ux8be5ux503cux8fdbux884cux7a7aux503cux586bux5145}{%
+\subsubsection{通过观察可以得出，title属性值中括号里的内容通常为region\_1的属性值，因此可以提取该值进行空值填充}\label{ux901aux8fc7ux89c2ux5bdfux53efux4ee5ux5f97ux51fatitleux5c5eux6027ux503cux4e2dux62ecux53f7ux91ccux7684ux5185ux5bb9ux901aux5e38ux4e3aregion_1ux7684ux5c5eux6027ux503cux56e0ux6b64ux53efux4ee5ux63d0ux53d6ux8be5ux503cux8fdbux884cux7a7aux503cux586bux5145}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{re}
+\PY{n}{comDF} \PY{o}{=} \PY{n}{WinerDFV2}\PY{p}{[}\PY{o}{\PYZti{}}\PY{n}{WinerDFV2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZam{}} \PY{o}{\PYZti{}}\PY{n}{WinerDFV2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\PY{n}{comDFLen} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{comDF}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Data size:}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{comDFLen}\PY{p}{)}
+\PY{n}{discom} \PY{o}{=} \PY{n}{comDF}\PY{o}{.}\PY{n}{apply}\PY{p}{(} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+m+mi}{0} \PY{k}{if} \PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[(](.*?)[)]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{k+kc}{None} \PY{k}{else} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{discom}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ (title提取不到region\PYZus{}1值), 数量为: }\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{discom}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Data size:\{\} 108723
+0 (title提取不到region\_1值), 数量为: 10110
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{comDF}\PY{o}{.}\PY{n}{apply}\PY{p}{(} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{k}{if} \PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[(](.*?)[)]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{k+kc}{None} \PY{k}{else} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+-1                                                    98613
+Château Lestage Simon 2012  Haut-Médoc                    4
+Domaine Vacheron 2015  Sancerre                           4
+Château Arnaud 2011  Saint-Estèphe                        3
+Château de Santenay 2012  Mercurey                        3
+                                                      {\ldots}
+Mauro Veglio 2010  Barbera d'Alba                         1
+Molino di Sant'Antimo 2005  Brunello di Montalcino        1
+Château de Riberon 2011  Bordeaux Supérieur               1
+Château Timberlay 2014  Bordeaux Clairet                  1
+Corte Adami 2012  Soave                                   1
+Length: 9102, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux53efux4ee5ux770bux5230titleux4e2dux786eux5b9eux4e0dux542bregion_1ux7684ux4fe1ux606fux5373ux4e0dux542bux62ecux53f7}{%
+\subsubsection{可以看到title中确实不含region\_1的信息，即不含括号}\label{ux53efux4ee5ux770bux5230titleux4e2dux786eux5b9eux4e0dux542bregion_1ux7684ux4fe1ux606fux5373ux4e0dux542bux62ecux53f7}}
+
+\hypertarget{ux63a5ux4e0bux6765ux7edfux8ba1ux5728ux542bux6709ux62ecux53f7ux7684titleux4e2dux63d0ux53d6ux5230ux7684region_1ux7684ux503cux4e0eux5b9eux9645ux63d0ux4f9bux7684region_1ux503cux76f8ux7b49ux7684ux6570ux91cf.-0ux4ee3ux8868ux4e0dux76f8ux7b491ux4ee3ux8868ux76f8ux7b49-1ux4ee3ux8868ux63d0ux53d6ux4e0dux5230ux4fe1ux606f}{%
+\subsubsection{\texorpdfstring{接下来统计在含有括号的title中提取到的region\_1的值，与实际提供的region\_1值相等的数量.0代表不相等，1代表相等，-1代表提取不到信息}{接下来统计在含有括号的title中提取到的region\_1的值，与实际提供的region\_1值相等的数量.  0代表不相等，1代表相等，-1代表提取不到信息}}\label{ux63a5ux4e0bux6765ux7edfux8ba1ux5728ux542bux6709ux62ecux53f7ux7684titleux4e2dux63d0ux53d6ux5230ux7684region_1ux7684ux503cux4e0eux5b9eux9645ux63d0ux4f9bux7684region_1ux503cux76f8ux7b49ux7684ux6570ux91cf.-0ux4ee3ux8868ux4e0dux76f8ux7b491ux4ee3ux8868ux76f8ux7b49-1ux4ee3ux8868ux63d0ux53d6ux4e0dux5230ux4fe1ux606f}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 统计相等数量}
+\PY{n}{comDF}\PY{o}{.}\PY{n}{apply}\PY{p}{(} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{k}{if} \PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[(](.*?)[)]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{k+kc}{None} \PY{k}{else} \PY{p}{(}\PY{l+m+mi}{1} \PY{k}{if} \PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[(](.*?)[)]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{group}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{==} \PY{n}{x}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{k}{else} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ 1    92897
+-1    10110
+ 0     5716
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux6240ux4ee5ux53efux4ee5ux8ba4ux4e3atitleux4e2dux63d0ux53d6ux5230ux7684region_1ux670994.2ux6982ux7387ux662fux6b63ux786eux7684}{%
+\subsubsection{所以可以认为，title中提取到的region\_1有94.2\%概率是正确的}\label{ux6240ux4ee5ux53efux4ee5ux8ba4ux4e3atitleux4e2dux63d0ux53d6ux5230ux7684region_1ux670994.2ux6982ux7387ux662fux6b63ux786eux7684}}
+
+\hypertarget{ux63a5ux4e0bux6765ux4f7fux7528titleux4e2dux63d0ux53d6ux7684ux4fe1ux606fux586bux5145region_1ux7684ux7f3aux5931ux503cux63d0ux53d6ux4e0dux5230ux4fe1ux606fux4f7fux7528provinceux586bux5145}{%
+\subsubsection{接下来使用title中提取的信息填充region\_1的缺失值。提取不到信息，使用province填充。}\label{ux63a5ux4e0bux6765ux4f7fux7528titleux4e2dux63d0ux53d6ux7684ux4fe1ux606fux586bux5145region_1ux7684ux7f3aux5931ux503cux63d0ux53d6ux4e0dux5230ux4fe1ux606fux4f7fux7528provinceux586bux5145}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{WinerDFV2}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{WinerDFV2New} \PY{o}{=} \PY{n}{WinerDFV2}
+\PY{n}{NoneRegionList} \PY{o}{=} \PY{n}{WinerDFV2New}\PY{p}{[}\PY{n}{WinerDFV2New}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{province}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(} \PY{n+nb}{len}\PY{p}{(}\PY{n}{NoneRegionList}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{NoneRegionList}\PY{o}{.}\PY{n}{itertuples}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{!=}\PY{k+kc}{None}\PY{p}{:}
+        \PY{n}{result} \PY{o}{=}\PY{n}{re}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[(](.*?)[)]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+        \PY{k}{if} \PY{n}{result} \PY{o}{!=}\PY{k+kc}{None}\PY{p}{:}
+            \PY{n}{region} \PY{o}{=} \PY{n}{result}\PY{o}{.}\PY{n}{group}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{WinerDFV2New}\PY{p}{[}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}\PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{region}      
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+21247
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 查看补全之后的空值数量}
+\PY{n+nb}{len}\PY{p}{(}\PY{n}{WinerDFV2New}\PY{p}{[}\PY{n}{WinerDFV2New}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+412
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux53efux4ee5ux770bux5230ux901aux8fc7ux8be5ux6b65ux9aa4ux89e3ux51b3ux4e86-21247--412-20835-ux6761ux5143ux7ec4ux7684region_1ux7684ux503cux7f3aux5931}{%
+\subsubsection{可以看到通过该步骤解决了 21247- 412 = 20835
+条元组的region\_1的值缺失}\label{ux53efux4ee5ux770bux5230ux901aux8fc7ux8be5ux6b65ux9aa4ux89e3ux51b3ux4e86-21247--412-20835-ux6761ux5143ux7ec4ux7684region_1ux7684ux503cux7f3aux5931}}
+
+    \hypertarget{ux5bf9ux6bd4ux6e05ux6d17ux524dux540eux7684ux6570ux636eux96c6}{%
+\subsubsection{对比清洗前后的数据集}\label{ux5bf9ux6bd4ux6e05ux6d17ux524dux540eux7684ux6570ux636eux96c6}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 获取原数据集}
+\PY{n}{WinerDFV2Old} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F:/Data Mining/Wine Reviews/wine\PYZhy{}reviews/winemag\PYZhy{}data\PYZhy{}130k\PYZhy{}v2.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} 
+                        \PY{n}{names} \PY{o}{=} \PY{n}{column\PYZus{}names}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{region\PYZus{}now} \PY{o}{=} \PY{n}{WinerDFV2New}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{region\PYZus{}old} \PY{o}{=} \PY{n}{WinerDFV2Old}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{regionNowDF} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{region\PYZus{}now}\PY{o}{.}\PY{n}{values}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{regionOldDF} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}old}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{region\PYZus{}old}\PY{o}{.}\PY{n}{values}\PY{p}{\PYZcb{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 按列组成新的Dataframe}
+\PY{n}{newDF2} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(} \PY{p}{[} \PY{n}{regionNowDF}\PY{p}{,} \PY{n}{regionOldDF}\PY{p}{]} \PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1} \PY{p}{)}
+\PY{n}{newDF2}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                        region           region\_old
+0                        Douro                  NaN
+1            Willamette Valley    Willamette Valley
+2          Lake Michigan Shore  Lake Michigan Shore
+3            Willamette Valley    Willamette Valley
+4                      Navarra              Navarra
+{\ldots}                        {\ldots}                  {\ldots}
+129965  Erben Müller-Burggraef                  NaN
+129966                  Oregon               Oregon
+129967                  Alsace               Alsace
+129968                  Alsace               Alsace
+129969                  Alsace               Alsace
+
+[129970 rows x 2 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux63a5ux4e0bux6765ux4f7fux7528ux5206ux7ec4ux51fdux6570groupbyux6309ux5904ux7406ux540eux7684region_1ux8fdbux884cux5206ux7ec4ux5e76ux5bf9ux5206ux7ec4ux7ed3ux679cux8fdbux884cux805aux548csizeux4ee3ux8868ux5904ux7406ux540eux8be5ux7ec4-region_1-ux4e2aux6570countux4ee3ux8868ux6e05ux6d17ux524dux8be5ux7ec4region_1ux7684ux4e2aux6570}{%
+\subsubsection{\texorpdfstring{接下来使用分组函数\texttt{groupby}，按处理后的region\_1进行分组，并对分组结果进行聚和，size代表处理后该组region\_1
+个数，count代表清洗前该组region\_1的个数}{接下来使用分组函数groupby，按处理后的region\_1进行分组，并对分组结果进行聚和，size代表处理后该组  region\_1 个数，count代表清洗前该组region\_1的个数}}\label{ux63a5ux4e0bux6765ux4f7fux7528ux5206ux7ec4ux51fdux6570groupbyux6309ux5904ux7406ux540eux7684region_1ux8fdbux884cux5206ux7ec4ux5e76ux5bf9ux5206ux7ec4ux7ed3ux679cux8fdbux884cux805aux548csizeux4ee3ux8868ux5904ux7406ux540eux8be5ux7ec4-region_1-ux4e2aux6570countux4ee3ux8868ux6e05ux6d17ux524dux8be5ux7ec4region_1ux7684ux4e2aux6570}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 调整直方图的尺寸}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.figsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}
+\PY{n}{newDF2}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region\PYZus{}old}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{agg}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{size}\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{50}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<matplotlib.axes.\_subplots.AxesSubplot at 0x2d81b1d3808>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_88_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{ux53efux4ee5ux660eux663eux770bux5230ux901aux8fc7ux5904ux7406ux8865ux5145ux4e86ux4e00ux4e9bregion_1ux7c7bux83b7ux53d6ux5230ux4e86ux65b0ux7684ux4fe1ux606f}{%
+\subsubsection{可以明显看到通过处理补充了一些region\_1类，获取到了新的信息}\label{ux53efux4ee5ux660eux663eux770bux5230ux901aux8fc7ux5904ux7406ux8865ux5145ux4e86ux4e00ux4e9bregion_1ux7c7bux83b7ux53d6ux5230ux4e86ux65b0ux7684ux4fe1ux606f}}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
